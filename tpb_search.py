@@ -50,7 +50,7 @@ if __name__ == "__main__":
     t = get_torrents(url)
     n = 0
     for i in t:
-        print(str(n) + ">\t(" + i['entry_seeds'] + "/" + i['entry_leech'] + ") " + i['entry_name'])
+        print(str(n) + ">\t(" + i['entry_seeds'] + "/" + i['entry_leech'] + ") " + i['entry_name'] + " (" + i['entry_size'] + ") " + i['entry_uploaded']) 
         n += 1
 
     if not t:

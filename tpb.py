@@ -50,7 +50,7 @@ def parse_torrents(entries):
             unique_identifier += str(entry_info['season']) + str(entry_info['episode'])
         if unique_identifier not in entries_seen:
             entries_seen.append(unique_identifier)
-            i = input("Download %s [y/N]? " % entry['entry_name'])
+            i = input("Download %s (%s) [y/N]? " % (entry['entry_name'], entry['entry_size']))
             if i.lower() in ["y", "yes"]:
                 downloads.append( (entry['entry_name'], entry['entry_link']) )
 
