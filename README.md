@@ -6,6 +6,10 @@ download.sh: Download a torrent with transmission-cli and kill when complete
 tpb.py: Get all new torrents since last script run from TPB and prompt for download
 tpb_search.py: Search TPB for a torrent
 transmission_rpc_gettorrent.py: How to connect to Transmission RPC via Python
+erase_seeding_paused_torrents.py: Cron job to clean up Transmission server torrents via RPC
+move_incoming_torrents.py: Cron job to classify new TV series torrents in /mnt/incoming using PTN module and move them to the right place. 
+
+settings.json: Transmission RPC settings
 
 config.py:
 ```tpb = 'https://tpbprox.com'
