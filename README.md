@@ -21,6 +21,8 @@ page_max = 5
 page_retries = 5
 
 db = '/home/adam/code/torrent_downloader/db.txt'
+# A list of anything to highlight if it appears
+waiting_list = '/home/adam/code/torrent_downloader/waiting.txt'
 
 #transmission rpc server
 dl_host=""

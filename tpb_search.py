@@ -10,7 +10,7 @@ from urllib import parse
 from sys import argv
 from config import tpb, headers, page_retries
 from scraper import scrape
-from config import dl_host, dl_port, dl_user, dl_pass
+from config import dl_host, dl_port, dl_user, dl_pass, waiting_list
 import transmissionrpc
 
 #----#
@@ -43,6 +43,9 @@ if __name__ == "__main__":
         print("Provide a search query")
         quit()
 
+    with open(waiting_list, 'r') as f:
+        wlist = f.read().split("\n")
+
     search = parse.quote(" ".join(argv[1:]))
     url = tpb + "/search/" + search + "/0/99/0"
 
@@ -50,7 +53,16 @@ if __name__ == "__main__":
     t = get_torrents(url)
     n = 0
     for i in t:
-        print(str(n) + ">\t(" + i['entry_seeds'] + "/" + i['entry_leech'] + ") " + i['entry_name'] + " (" + i['entry_size'] + ") " + i['entry_uploaded']) 
+        highlight = ""
+        for line in wlist:
+            found = True
+            for word in line.lower().split(" "):
+                if i['entry_name'].lower().find(word) == 0:
+                    found = False
+            if found is True:
+                highlight = "[!] "
+                break
+        print(highlight + str(n) + ">\t(" + i['entry_seeds'] + "/" + i['entry_leech'] + ") " + i['entry_name'] + " (" + i['entry_size'] + ") " + i['entry_uploaded']) 
         n += 1
 
     if not t:
