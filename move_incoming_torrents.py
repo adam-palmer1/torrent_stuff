@@ -47,6 +47,16 @@ def strip_nonalnum(word):
             break
     return word[start:len(word) - end]
 
+def move_unknown_file(filename):
+    if '/'.join(filename.split('/')[:-1]) == incoming_files: #it's an unknown file in the root
+        dest = unknown_files
+    else:
+        unknown_dir = "/" + '/'.join(filename.split('/')[-2:-1])
+        dest = sys_mkdir(unknown_files + unknown_dir)
+    sys_command = "mv " + "'" + filename + "' '" + dest + "'"
+    sys_exec(sys_command)
+
+
 dirs = [ incoming_files ] + [f.path for f in scandir(incoming_files) if f.is_dir() ]
 for dirname in dirs:
     for filename in [f for f in listdir(dirname) if path.isfile(path.join(dirname, f))]:
@@ -64,13 +74,7 @@ for dirname in dirs:
                 torrent_info = dir_torrent_info
                 if chk_torrent(torrent_info) is None:
                     #move filename to unknown_files
-                    if '/'.join(filename.split('/')[:-1]) == incoming_files: #it's an unknown file in the root
-                        dest = unknown_files
-                    else:
-                        unknown_dir = "/" + '/'.join(filename.split('/')[-2:-1])
-                        dest = sys_mkdir(unknown_files + unknown_dir)
-                    sys_command = "mv " + "'" + filename + "' '" + dest + "'"
-                    sys_exec(sys_command)
+                    move_unknown_file(filename)
                 else:
                     ok = 1
             if ok == 1:
@@ -80,6 +84,11 @@ for dirname in dirs:
                 #clean it up a bit now
                 torrent_info['title'] = torrent_info['title'].replace("\'", " ").replace("\"", " ").replace(".", " ")
                 torrent_info['title'] = re.sub(r'[^a-zA-Z0-9_ ]', '', torrent_info['title'])
+                #Make sure torrent_info['title'] is still sane:
+                if torrent_info['title'].strip() == '':
+                    ok == 0
+                    move_unknown_file(filename)
+            if ok == 1:
                 dest = dest_dir + "/" + torrent_info['title']
                 if 'year' in torrent_info:
                     dest += " (" + str(torrent_info['year'] )+ ")"
