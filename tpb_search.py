@@ -55,9 +55,11 @@ if __name__ == "__main__":
     for i in t:
         highlight = ""
         for line in wlist:
+            if line.strip() == '':
+                break
             found = True
             for word in line.lower().split(" "):
-                if i['entry_name'].lower().find(word) == 0:
+                if i['entry_name'].lower().find(word) != 0:
                     found = False
             if found is True:
                 highlight = "[!] "
