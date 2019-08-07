@@ -59,7 +59,7 @@ if __name__ == "__main__":
                 break
             found = True
             for word in line.lower().split(" "):
-                if i['entry_name'].lower().find(word) != 0:
+                if i['entry_name'].lower().find(word) == -1:
                     found = False
             if found is True:
                 highlight = "[!] "

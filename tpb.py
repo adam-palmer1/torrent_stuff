@@ -6,13 +6,16 @@ from time import sleep
 from os import path
 from config import tpb, headers, page_max, page_retries, db
 from scraper import scrape
-from config import dl_host, dl_port, dl_user, dl_pass
+from config import dl_host, dl_port, dl_user, dl_pass, waiting_list
 import transmissionrpc
-
+from pprint import pprint
 #----#
 
 #global transmission object
 tc = transmissionrpc.Client(dl_host, user=dl_user, password=dl_pass, port=dl_port)
+
+with open(waiting_list, 'r') as f:
+    wlist = f.read().split("\n")
 
 def get_torrents():
     session = requests.Session()
@@ -50,7 +53,20 @@ def parse_torrents(entries):
             unique_identifier += str(entry_info['season']) + str(entry_info['episode'])
         if unique_identifier not in entries_seen:
             entries_seen.append(unique_identifier)
-            i = input("Download %s (%s) [y/N]? " % (entry['entry_name'], entry['entry_size']))
+
+            highlight = ""
+            for line in wlist:
+                if line.strip() == '':
+                    break
+                found = True
+                for word in line.lower().split(" "):
+                    if entry['entry_name'].lower().find(word) == -1:
+                        found = False
+                if found is True:
+                    highlight = "[!] "
+                    break
+
+            i = input(highlight + "Download %s (%s) [y/N]? " % (entry['entry_name'], entry['entry_size']))
             if i.lower() in ["y", "yes"]:
                 downloads.append( (entry['entry_name'], entry['entry_link']) )
 
