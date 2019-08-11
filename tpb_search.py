@@ -10,7 +10,7 @@ from urllib import parse
 from sys import argv
 from config import tpb, headers, page_retries
 from scraper import scrape
-from config import dl_host, dl_port, dl_user, dl_pass, waiting_list
+from config import dl_host, dl_port, dl_user, dl_pass, waiting_list, ssl_verify
 import transmissionrpc
 
 #----#
@@ -24,7 +24,7 @@ def get_torrents(url):
     entries = []
 
     for t in range(page_retries):
-        page = session.get(url)
+        page = session.get(url, verify=ssl_verify)
         if page.status_code is not 200:
             print ("Error retrieving page: %d (Retrying in %d seconds)" % (page.status_code, t))
             sleep(t)

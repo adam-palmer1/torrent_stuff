@@ -34,4 +34,7 @@ movie_files = ["mp4", "mkv", "mpg", "avi"];
 incoming_files = "/mnt/incoming"
 unknown_files = "/mnt/unknown"
 dest_dir = "/mnt/tv"
+
+#ssl verification
+verify = False
 ```

@@ -6,7 +6,7 @@ from time import sleep
 from os import path
 from config import tpb, headers, page_max, page_retries, db
 from scraper import scrape
-from config import dl_host, dl_port, dl_user, dl_pass, waiting_list
+from config import dl_host, dl_port, dl_user, dl_pass, waiting_list, ssl_verify
 import transmissionrpc
 from pprint import pprint
 #----#
@@ -25,7 +25,7 @@ def get_torrents():
     for p in range(page_max):
         url = tpb + '/browse/200/' + str(p) + '/7'
         for t in range(page_retries):
-            page = session.get(url)
+            page = session.get(url, verify=ssl_verify)
             if page.status_code is not 200:
                 print ("Error %d retrieving page %d (retry %d): " % (page.status_code, p, t))
                 sleep(t)
